@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::#content})}">
+
+<head>
+    <title>Create Customer - Mini Bank</title>
+</head>
+
+<body>
+    <div id="content">
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2"><i class="bi bi-person-plus"></i> Create New Customer</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <a href="/customers" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Customers
+                </a>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="m-0 font-weight-bold">Customer Information</h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/customers/create}" th:object="${customer}" method="post">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" th:field="*{name}"
+                                        th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'" id="name"
+                                        placeholder="Enter full name" required>
+                                    <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                                        <span th:errors="*{name}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" th:field="*{email}"
+                                        th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" id="email"
+                                        placeholder="Enter email address" required>
+                                    <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                                        <span th:errors="*{email}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="kycStatus" class="form-label">KYC Status</label>
+                                <select class="form-select" th:field="*{kycStatus}" id="kycStatus">
+                                    <option value="PENDING">Pending</option>
+                                    <option value="APPROVED">Approved</option>
+                                    <option value="REJECTED">Rejected</option>
+                                </select>
+                            </div>
+
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i>
+                                <strong>Note:</strong> A unique customer ID will be automatically generated upon
+                                creation.
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/customers" class="btn btn-secondary me-md-2">
+                                    <i class="bi bi-x"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check"></i> Create Customer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

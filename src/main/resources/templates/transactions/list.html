@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::#content})}">
+
+<head>
+    <title>Transactions - Mini Bank</title>
+</head>
+
+<body>
+    <div id="content">
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2"><i class="bi bi-arrow-left-right"></i> Transactions</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <a href="/transactions/transfer" class="btn btn-primary">
+                    <i class="bi bi-plus"></i> New Transfer
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold">All Transactions</h6>
+            </div>
+            <div class="card-body">
+                <div th:if="${transactions.empty}" class="text-center py-4">
+                    <i class="bi bi-arrow-left-right display-1 text-muted"></i>
+                    <h5 class="mt-3 text-muted">No transactions found</h5>
+                    <p class="text-muted">Start by making your first transfer.</p>
+                    <a href="/transactions/transfer" class="btn btn-primary">
+                        <i class="bi bi-plus"></i> Make First Transfer
+                    </a>
+                </div>
+
+                <div th:unless="${transactions.empty}" class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>External ID</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th>Booked Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="transaction : ${transactions}">
+                                <td>
+                                    <small class="font-monospace"
+                                        th:text="${#strings.substring(transaction.id.toString(), 0, 8) + '...'}"></small>
+                                </td>
+                                <td>
+                                    <code th:text="${transaction.externalId}"></code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary" th:text="${transaction.type}"></span>
+                                </td>
+                                <td>
+                                    <span th:if="${transaction.status == 'COMPLETED'}"
+                                        class="badge bg-success">Completed</span>
+                                    <span th:if="${transaction.status == 'PENDING'}"
+                                        class="badge bg-warning">Pending</span>
+                                    <span th:if="${transaction.status == 'FAILED'}"
+                                        class="badge bg-danger">Failed</span>
+                                </td>
+                                <td th:text="${#temporals.format(transaction.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td
+                                    th:text="${transaction.bookedAt != null ? #temporals.format(transaction.bookedAt, 'yyyy-MM-dd HH:mm:ss') : 'Not booked'}">
+                                </td>
+                                <td>
+                                    <a th:href="@{/transactions/{id}(id=${transaction.id})}"
+                                        class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

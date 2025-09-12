@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::#content})}">
+
+<head>
+    <title>Money Transfer - Mini Bank</title>
+</head>
+
+<body>
+    <div id="content">
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2"><i class="bi bi-arrow-left-right"></i> Money Transfer</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <a href="/transactions" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Transactions
+                </a>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="m-0 font-weight-bold">Transfer Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/transactions/transfer}" method="post">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="fromAccountId" class="form-label">From Account *</label>
+                                    <select class="form-select" name="fromAccountId" id="fromAccountId" required>
+                                        <option value="">Select source account...</option>
+                                        <option th:each="account : ${accounts}" th:value="${account.id}"
+                                            th:selected="${preselectedAccount != null and preselectedAccount.equals(account.id)}"
+                                            th:text="${account.iban + ' (' + account.currency + ')'}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="toAccountId" class="form-label">To Account *</label>
+                                    <select class="form-select" name="toAccountId" id="toAccountId" required>
+                                        <option value="">Select destination account...</option>
+                                        <option th:each="account : ${accounts}" th:value="${account.id}"
+                                            th:text="${account.iban + ' (' + account.currency + ')'}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="amount" class="form-label">Amount *</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="amount" id="amount" step="0.01"
+                                            min="0.01" placeholder="0.00" required>
+                                        <input type="hidden" name="amountCents" id="amountCents">
+                                    </div>
+                                    <div class="form-text">Enter amount in decimal format (e.g., 100.50)</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="currency" class="form-label">Currency *</label>
+                                    <select class="form-select" name="currency" id="currency" required>
+                                        <option value="">Select currency...</option>
+                                        <option value="USD">USD - US Dollar</option>
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="GBP">GBP - British Pound</option>
+                                        <option value="JPY">JPY - Japanese Yen</option>
+                                        <option value="CAD">CAD - Canadian Dollar</option>
+                                        <option value="AUD">AUD - Australian Dollar</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="narrative" class="form-label">Description / Narrative</label>
+                                <textarea class="form-control" name="narrative" id="narrative" rows="3"
+                                    placeholder="Optional description for this transfer..."></textarea>
+                            </div>
+
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <strong>Important:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Ensure both accounts use the same currency for this transfer</li>
+                                    <li>This transfer will be processed immediately</li>
+                                    <li>Double-check account details before submitting</li>
+                                </ul>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/transactions" class="btn btn-secondary me-md-2">
+                                    <i class="bi bi-x"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-arrow-right"></i> Process Transfer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Convert decimal amount to cents before submitting
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const amountInput = document.getElementById('amount');
+            const amountCentsInput = document.getElementById('amountCents');
+            const amount = parseFloat(amountInput.value);
+
+            if (!isNaN(amount)) {
+                amountCentsInput.value = Math.round(amount * 100);
+            }
+        });
+
+        // Prevent transferring to the same account
+        document.getElementById('fromAccountId').addEventListener('change', updateToAccountOptions);
+        document.getElementById('toAccountId').addEventListener('change', updateFromAccountOptions);
+
+        function updateToAccountOptions() {
+            const fromAccountId = document.getElementById('fromAccountId').value;
+            const toAccountSelect = document.getElementById('toAccountId');
+
+            Array.from(toAccountSelect.options).forEach(option => {
+                if (option.value === fromAccountId) {
+                    option.disabled = true;
+                    if (option.selected) {
+                        option.selected = false;
+                    }
+                } else {
+                    option.disabled = false;
+                }
+            });
+        }
+
+        function updateFromAccountOptions() {
+            const toAccountId = document.getElementById('toAccountId').value;
+            const fromAccountSelect = document.getElementById('fromAccountId');
+
+            Array.from(fromAccountSelect.options).forEach(option => {
+                if (option.value === toAccountId) {
+                    option.disabled = true;
+                    if (option.selected) {
+                        option.selected = false;
+                    }
+                } else {
+                    option.disabled = false;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

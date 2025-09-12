@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::#content})}">
+
+<head>
+    <title>Create Account - Mini Bank</title>
+</head>
+
+<body>
+    <div id="content">
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2"><i class="bi bi-plus-circle"></i> Create New Account</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <a href="/accounts" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Accounts
+                </a>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="m-0 font-weight-bold">Account Information</h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/accounts/create}" th:object="${account}" method="post">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="customerId" class="form-label">Customer *</label>
+                                    <select class="form-select" th:field="*{customerId}"
+                                        th:classappend="${#fields.hasErrors('customerId')} ? 'is-invalid'"
+                                        id="customerId" required>
+                                        <option value="">Select a customer...</option>
+                                        <option th:each="customer : ${customers}" th:value="${customer.id}"
+                                            th:text="${customer.name + ' (' + customer.email + ')'}">
+                                        </option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('customerId')}" class="invalid-feedback">
+                                        <span th:errors="*{customerId}"></span>
+                                    </div>
+                                    <div class="form-text">
+                                        <a href="/customers/new" target="_blank">Create new customer</a> if not found in
+                                        the list.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="currency" class="form-label">Currency *</label>
+                                    <select class="form-select" th:field="*{currency}"
+                                        th:classappend="${#fields.hasErrors('currency')} ? 'is-invalid'" id="currency"
+                                        required>
+                                        <option value="">Select currency...</option>
+                                        <option value="USD">USD - US Dollar</option>
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="GBP">GBP - British Pound</option>
+                                        <option value="JPY">JPY - Japanese Yen</option>
+                                        <option value="CAD">CAD - Canadian Dollar</option>
+                                        <option value="AUD">AUD - Australian Dollar</option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('currency')}" class="invalid-feedback">
+                                        <span th:errors="*{currency}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i>
+                                <strong>Note:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Account ID and IBAN will be automatically generated</li>
+                                    <li>Account will be created with ACTIVE status</li>
+                                    <li>Initial balance will be zero</li>
+                                </ul>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/accounts" class="btn btn-secondary me-md-2">
+                                    <i class="bi bi-x"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check"></i> Create Account
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

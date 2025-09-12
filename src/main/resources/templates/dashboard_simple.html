@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Bank Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar vh-100 position-fixed">
+                <div class="pt-3">
+                    <a href="/"
+                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <i class="bi bi-bank fs-4 me-2"></i>
+                        <span class="fs-4">Mini Bank</span>
+                    </a>
+                    <hr class="text-white">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link active text-white" aria-current="page">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/customers" class="nav-link text-white">
+                                <i class="bi bi-people me-2"></i>
+                                Customers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/accounts" class="nav-link text-white">
+                                <i class="bi bi-credit-card me-2"></i>
+                                Accounts
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/transactions" class="nav-link text-white">
+                                <i class="bi bi-arrow-left-right me-2"></i>
+                                Transactions
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 offset-md-3 offset-lg-2">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="bi bi-speedometer2"></i> Dashboard</h1>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2"
+                            style="border-left: 0.25rem solid #4e73df !important;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Total Customers
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <span th:text="${totalCustomers}"
+                                                xmlns:th="http://www.thymeleaf.org">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="bi bi-people fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2"
+                            style="border-left: 0.25rem solid #1cc88a !important;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Total Accounts
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <span th:text="${totalAccounts}"
+                                                xmlns:th="http://www.thymeleaf.org">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="bi bi-credit-card fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2"
+                            style="border-left: 0.25rem solid #36b9cc !important;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Total Transactions
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <span th:text="${totalTransactions}"
+                                                xmlns:th="http://www.thymeleaf.org">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="bi bi-arrow-left-right fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <a href="/customers/new" class="btn btn-primary btn-lg w-100">
+                                            <i class="bi bi-person-plus"></i> Add New Customer
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <a href="/accounts/new" class="btn btn-success btn-lg w-100">
+                                            <i class="bi bi-credit-card"></i> Create Account
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <a href="/transactions/transfer" class="btn btn-warning btn-lg w-100">
+                                            <i class="bi bi-arrow-left-right"></i> Money Transfer
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <a href="/customers" class="btn btn-info btn-lg w-100">
+                                            <i class="bi bi-list"></i> View All Customers
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">System Status</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <span>Database</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <span>API Services</span>
+                                    <span class="badge bg-success">Running</span>
+                                </div>
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <span>Security</span>
+                                    <span class="badge bg-success">Active</span>
+                                </div>
+                                <hr>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock"></i> System is operational
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
